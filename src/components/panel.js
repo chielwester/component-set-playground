@@ -1,0 +1,147 @@
+(() => ({
+  name: 'Panel',
+  icon: 'PanelIcon',
+  category: 'LAYOUT',
+  type: 'PANEL',
+  allowedTypes: ['ROW'],
+  orientation: 'HORIZONTAL',
+  jsx: (
+    <div className={classes.panel}>
+      {options.panelTitle && (
+        <div className={classes.title}>{options.panelTitle}</div>
+      )}
+      {(() => {
+        const isEmpty = children.length === 0;
+
+        const isPristine = isEmpty && B.env === 'dev';
+
+        return (
+          <div
+            className={[
+              classes.content,
+              isEmpty ? classes.empty : '',
+              isPristine ? classes.pristine : '',
+            ].join(' ')}
+          >
+            {isPristine ? 'Panel' : children}
+          </div>
+        );
+      })()}
+    </div>
+  ),
+  styles: B => theme => {
+    const style = new B.Styling(theme);
+    const getSpacing = (idx, device = 'Mobile') =>
+      idx === '0' ? '0rem' : style.getSpacing(idx, device);
+    return {
+      panel: {
+        display: 'flex',
+        flexDirection: 'column',
+        marginTop: getSpacing('S'),
+        marginRight: getSpacing('S'),
+        marginBottom: getSpacing('S'),
+        marginLeft: getSpacing('S'),
+        height: 'auto',
+        minHeight: 1,
+        backgroundColor: 'transparent',
+        borderWidth: '0.125rem',
+        borderColor: ({ options: { panelColor } }) =>
+          style.getColor(panelColor) || style.getColor('Primary'),
+        borderStyle: 'solid',
+        borderRadius: '0.125rem',
+        overflow: 'auto',
+        boxSizing: 'border-box',
+      },
+      title: {
+        margin: '0',
+        display: 'block',
+        paddingRight: '0.5rem',
+        paddingLeft: '0.5rem',
+        paddingTop: '0.4375rem',
+        paddingBottom: '0.5625rem',
+        fontFamily: style.getFontFamily('Body1'),
+        fontSize: '1rem',
+        fontWeight: style.getFontWeight('Body1'),
+        textTransform: style.getTextTransform('Body1'),
+        letterSpacing: style.getLetterSpacing('Body1'),
+        color: ({ options: { color } }) =>
+          style.getColor(color) || style.getColor('White'),
+        backgroundColor: ({ options: { panelColor } }) =>
+          style.getColor(panelColor) || style.getColor('Primary'),
+        borderBottomWidth: '0.125rem',
+        borderBottomColor: ({ options: { panelColor } }) =>
+          style.getColor(panelColor) || style.getColor('Primary'),
+        borderBottomStyle: 'solid',
+      },
+      content: {
+        flexGrow: 1,
+        flexBasis: '100%',
+        paddingTop: getSpacing('M'),
+        paddingRight: getSpacing('M'),
+        paddingBottom: getSpacing('M'),
+        paddingLeft: getSpacing('M'),
+      },
+      [`@media ${B.mediaMinWidth(768)}`]: {
+        panel: {
+          margin: getSpacing('0', 'Portrait'),
+        },
+        title: {
+          paddingRight: getSpacing('M', 'Portrait'),
+          paddingLeft: getSpacing('M', 'Portrait'),
+          fontSize: style.getFontSize('Body1', 'Portrait'),
+        },
+        content: {
+          paddingTop: getSpacing('M', 'Portrait'),
+        },
+      },
+      [`@media ${B.mediaMinWidth(1024)}`]: {
+        panel: {
+          marginTop: getSpacing('0', 'Landscape'),
+          marginRight: getSpacing('0', 'Landscape'),
+          marginBottom: getSpacing('0', 'Landscape'),
+          marginLeft: getSpacing('0', 'Landscape'),
+        },
+        title: {
+          paddingRight: getSpacing('M', 'Landscape'),
+          paddingLeft: getSpacing('M', 'Landscape'),
+          fontSize: style.getFontSize('Body1', 'Landscape'),
+        },
+        content: {
+          padding: getSpacing('M', 'Landscape'),
+        },
+      },
+      [`@media ${B.mediaMinWidth(1200)}`]: {
+        panel: {
+          marginTop: getSpacing('0', 'Desktop'),
+          marginRight: getSpacing('0', 'Desktop'),
+          marginBottom: getSpacing('0', 'Desktop'),
+          marginLeft: getSpacing('0', 'Desktop'),
+        },
+        title: {
+          paddingRight: getSpacing('M', 'Desktop'),
+          paddingLeft: getSpacing('M', 'Desktop'),
+          fontSize: style.getFontSize('Body1', 'Desktop'),
+        },
+        content: {
+          padding: getSpacing('M', 'Desktop'),
+        },
+      },
+      empty: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: () => 'center',
+        minHeight: '4rem',
+        height: '100%',
+        margin: '1rem',
+        fontSize: '0.75rem',
+      },
+      pristine: {
+        color: '#262A3A',
+        textTransform: 'uppercase',
+        boxSizing: 'border-box',
+        border: '0.0625rem dashed #AFB5C8',
+        backgroundColor: '#F0F1F5',
+      },
+    };
+  },
+}))();
